@@ -21,13 +21,13 @@ async function getAllPlayers() {
     return data.players;
 }
 
-async function getPlayerById() {
+async function getPlayerById(id) {
     const data = await readData();
     return data.players.find(p => p.id === parseInt(id))
 }
 
 async function createPlayer(player) {
-    const dat = await readData();
+    const data = await readData();
     data.players.push(player);
     await saveData(data);
     return player;
@@ -46,7 +46,7 @@ async function updatePlayer(id, updates) {
 
 async function deletePlayer(id) {
     const data = await readData();
-    const index = data.players.findeIndex(p => p.id === parseInt(id));
+    const index = data.players.findIndex(p => p.id === parseInt(id));
     if(index === -1) return null;
 
     const deleted = data.players.splice(index, 1)[0];
