@@ -17,6 +17,10 @@ async function createLoan(data) {
     if(user.isActive === false) {
         throw new Error ('usuario no activo')
     }
+    const maxBooks = user.membershipType === 'basic' ? 3 : 5
+    if (user.booksCurrentlyBorrowed >= maxBooks) {
+        throw new Error(`Has alcanzado el límite de ${maxBooks} libros para tu membresía ${user.membershipType}`)
+    }
 
     const loan = {
         userId: data.userId,

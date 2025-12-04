@@ -20,6 +20,8 @@ function errorHandler(err, req, res, next) {
     }
     res.status(statusCode).json({
         error: message,
-        timeStamp: new Date().toISOString
+        timeStamp: new Date().toISOString()
     })
 }
+
+module.exports = errorHandler;

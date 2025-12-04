@@ -2,6 +2,7 @@ const express = require('express');
 const app = express()
 const logger = require('./middlewares/logger');
 const timer = require('./middlewares/timer');
+const errorHandler = require('./middlewares/errorHandler')
 
 const booksRoutes = require ('./routes/bookRoutes')
 const userRoutes = require('./routes/userRoutes')

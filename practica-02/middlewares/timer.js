@@ -5,3 +5,4 @@ function timer (req,res,next) {
     })
     next()
 }
+module.exports = timer;
