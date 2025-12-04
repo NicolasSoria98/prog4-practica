@@ -16,17 +16,17 @@ function validateBook(book) {
 
 async function getAllBooks(filters ={}) {
     let AllBooks = await repository.getAllBooks();
-    AllBooks = AllBooks.filter(b =>
-        b.availableCopies > 0
-    )
+    if (filters.available === 'true') {
+        books = books.filter(b => b.availableCopies > 0)
+    }
     if(filters.category) {
         AllBooks = AllBooks.filter(b =>
-            b.category.toLowerCase() === book.filters.category.toLowerCase()
+            b.category.toLowerCase() === book.filters.category
         );
     }
     if(filters.author !== undefined) {
         AllBooks = AllBooks.filter(b =>
-            b.author.toLowerCase() === book.filters.author.toLowerCase()
+            b.author.toLowerCase() === book.filters.author
         );
     }
     return AllBooks;
@@ -41,9 +41,20 @@ async function getBookById(id) {
 }
 
 async function createBook(data) {
+        if (data.availableCopies < 0) {
+        throw new Error('Las copias disponibles no pueden ser negativas')
+    }
+
+    if (data.totalCopies < 1) {
+        throw new Error('Debe haber al menos 1 copia total')
+    }
+
+    if (data.availableCopies > data.totalCopies) {
+        throw new Error('Las copias disponibles no pueden superar las copias totales')
+    }
     const allBooks = await repository.getAllBooks();
-    const ISBNexists = allBooks.some(b => b.ISBN === data.ISBN);
-    if(ISBNexists) {
+    const isbnExists = allBooks.some(b => b.isbn === data.isbn);
+    if(isbnExists) {
         throw new Error('ya existe ese ISBN pa')
     }
     const book = {
