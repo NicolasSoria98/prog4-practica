@@ -17,16 +17,16 @@ function validateBook(book) {
 async function getAllBooks(filters ={}) {
     let AllBooks = await repository.getAllBooks();
     if (filters.available === 'true') {
-        books = books.filter(b => b.availableCopies > 0)
+        AllBooks = AllBooks.filter(b => b.availableCopies > 0)
     }
     if(filters.category) {
         AllBooks = AllBooks.filter(b =>
-            b.category.toLowerCase() === book.filters.category
+            b.category.toLowerCase() === filters.category.toLowerCase()
         );
     }
     if(filters.author !== undefined) {
         AllBooks = AllBooks.filter(b =>
-            b.author.toLowerCase() === book.filters.author
+            b.author.toLowerCase() === filters.author.toLowerCase()
         );
     }
     return AllBooks;
@@ -60,7 +60,7 @@ async function createBook(data) {
     const book = {
         title: data.title,
         author: data.author,
-        ISBN: data.ISBN,
+        isbn: data.isbn,
         category: data.category,
         availableCopies: data.availableCopies,
         totalCopies: data.totalCopies,
