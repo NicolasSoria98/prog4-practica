@@ -1,5 +1,5 @@
 const express = require('express');
-const router = require(express.Router)
+const router = express.Router
 const controller = require('../controllers/librosController')
 
 router.get('/', controller.getAllBooks)
@@ -11,4 +11,4 @@ router.patch('/:id', controller.updateBook)
 
 router.delete('/:id', controller.deleteBook)
 
-module.exports = router
+module.exports = router;

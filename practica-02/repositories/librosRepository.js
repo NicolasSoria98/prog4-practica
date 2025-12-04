@@ -5,7 +5,7 @@ const pathFile = path.join(__dirname, '../data/library.json')
 
 async function readData() {
     try {
-        const data = await fs.readFile(pathFile, 'utc-8')
+        const data = await fs.readFile(pathFile, 'utf-8')
         return JSON.parse(data)
     } catch (error) {
         return {books: [], users: [], loans: []}
@@ -35,7 +35,7 @@ async function createBook(book) {
 
 async function updateBook(id, updates) {
     const data = await readData();
-    index = data.books.findIndex(b => b.id === parseInt(id));
+    const index = data.books.findIndex(b => b.id === parseInt(id));
     if(index === -1) {
         return null;
     }
@@ -46,11 +46,11 @@ async function updateBook(id, updates) {
 
 async function deleteBook(id) {
     const data = await readData();
-    index = data.books.findIndex(b => b.id === parseInt(id));
+    const index = data.books.findIndex(b => b.id === parseInt(id));
     if(index === -1) {
         return null;
     }
-    deleted = data.books.splice(index,1)[0]
+    const deleted = data.books.splice(index,1)[0]
     await saveData(data);
     return deleted;
 }

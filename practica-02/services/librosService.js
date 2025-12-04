@@ -15,18 +15,18 @@ function validateBook(book) {
 }
 
 async function getAllBooks(filters ={}) {
-    const AllBooks = await repository.getAllBooks();
+    let AllBooks = await repository.getAllBooks();
     AllBooks = AllBooks.filter(b =>
         b.availableCopies > 0
     )
     if(filters.category) {
         AllBooks = AllBooks.filter(b =>
-            b.category.toLowerCase() === book.category.toLowerCase()
+            b.category.toLowerCase() === book.filters.category.toLowerCase()
         );
     }
     if(filters.author !== undefined) {
         AllBooks = AllBooks.filter(b =>
-            b.author.toLowerCase() === book.author.toLowerCase()
+            b.author.toLowerCase() === book.filters.author.toLowerCase()
         );
     }
     return AllBooks;
@@ -46,7 +46,6 @@ async function createBook(data) {
     if(ISBNexists) {
         throw new Error('ya existe ese ISBN pa')
     }
-    validateBook(book)
     const book = {
         title: data.title,
         author: data.author,
@@ -56,6 +55,7 @@ async function createBook(data) {
         totalCopies: data.totalCopies,
         publishedYear: data.publishedYear
     }
+    validateBook(book)
     book.id = allBooks.length > 0
     ? Math.max(...allBooks.map(b => b.id)) +1
     : 1;
@@ -72,7 +72,7 @@ async function updateBook(id, updates) {
 
 async function deleteBook(id) {
     const eliminado = await repository.deleteBook(id)
-    if(!exists) {
+    if(!eliminado) {
         throw new Error ('no encontrado')
     }
     return eliminado
