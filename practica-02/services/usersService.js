@@ -4,8 +4,12 @@ async function createUser(data) {
     if(!data.name || !data.email) {
         throw new Error('se necesita el correo y nombre')
     }
-    if(!data.membershipType) {
-        throw new Error('se necesita membresia')
+    const validMemberships = ['basic', 'premium']
+    if (!data.membershipType) {
+        throw new Error('El tipo de membresía es obligatorio')
+    }
+    if (!validMemberships.includes(data.membershipType)) {
+        throw new Error('El tipo de membresía debe ser: basic o premium')
     }
     const allUsers = await repository.getAllUsers()
     const emailExists = allUsers.some(u => u.email === data.email)
@@ -30,6 +34,15 @@ async function updateUser(id, updates) {
     const user = await repository.getUserById(id)
     if(!user) {
         throw new Error ('no existe')
+    }
+    if (updates.email) {
+        const allUsers = await repository.getAllUsers()
+        const emailTaken = allUsers.some(u => 
+            u.email === updates.email && u.id !== parseInt(id)
+        )
+        if (emailTaken) {
+            throw new Error('Email duplicado')
+        }
     }
     return await repository.updateUser(id, updates)
 }

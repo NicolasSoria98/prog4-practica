@@ -11,4 +11,4 @@ router.patch('/:id', controller.updateUser)
 
 router.delete('/:id', controller.deleteUser)
 
-module.exports = router
+module.exports = router;

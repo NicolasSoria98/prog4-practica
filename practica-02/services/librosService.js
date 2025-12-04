@@ -26,7 +26,7 @@ async function getAllBooks(filters ={}) {
     }
     if(filters.author !== undefined) {
         AllBooks = AllBooks.filter(b =>
-            b.author.toLowerCase() === filters.author.toLowerCase()
+            b.author.toLowerCase().includes(filters.author.toLowerCase())
         );
     }
     return AllBooks;
