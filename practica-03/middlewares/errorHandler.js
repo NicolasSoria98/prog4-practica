@@ -1,4 +1,4 @@
-function errorHandler (err, res, req, next) {
+function errorHandler (err, req, res, next) {
     let statusCode=500;
     let message = "error del servidor";
     if(err.message.includes('no encontrado')) {

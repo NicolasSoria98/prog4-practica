@@ -3,7 +3,7 @@ const service = require('../services/appointmentsService')
 async function createAppointment(req, res, next) {
     try {
         const nuevo = await service.createAppointment(req.body)
-        res(201).json(nuevo)
+        res.status(201).json(nuevo)
     } catch (error) {
         next(error)
     }
@@ -11,7 +11,8 @@ async function createAppointment(req, res, next) {
 
 async function getAllAppointments(req, res, next) {
     try {
-        const data = await service.getAllAppointments();
+        const filters = req.query
+        const data = await service.getAllAppointments(filters);
         res.json(data)
     } catch (error) {
         next(error)

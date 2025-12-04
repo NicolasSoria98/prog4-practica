@@ -1,4 +1,3 @@
-const { create } = require('domain');
 const repository = require('../repositories/petRepository')
 
 async function getAllPets() {
@@ -12,26 +11,26 @@ async function getPetById(id) {
     }
     return pet
 }
-async function createPet(data) {
-    const data = await repository.getAllPets();
-    if(!data.ownerId) {
+async function createPet(petData) {
+    const allPets = await repository.getAllPets();
+    if(!petData.ownerId) {
         throw new Error('necesita tener un dueño')
     }
-    if(data.age > 30 || data.age < 0) {
+    if(petData.age > 30 || petData.age < 0) {
         throw new Error ('edad invalida')
     }
     const pet = {
-        name: data.name,
-        species: data.species,
-        breed: data.breed,
-        weight: data.weight,
-        ownerId: data.ownerId,
-        medicalStatus: data.medicarlStatus,
+        name: petData.name,
+        species: petData.species,
+        breed: petData.breed,
+        weight: petData.weight,
+        ownerId: petData.ownerId,
+        medicalStatus: petData.medicarlStatus,
         lastCheckup: null,
         registeresAt: new Date().toISOString()
     }
-    pet.id = data.length > 0
-    ? Math.max(...data.map(d => d.id)) + 1
+    pet.id = allpets.length > 0
+    ? Math.max(...allpets.map(d => d.id)) + 1
     : 1
     return await repository.createPet(pet);
 }
@@ -45,7 +44,7 @@ async function updatePet(id, updates) {
 
 async function deletePet(id) {
     const eliminado = await repository.deletePet(id) 
-    if(!pet) {
+    if(!eliminado) {
         throw new Error('no encontrado')
     }
     return eliminado

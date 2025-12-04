@@ -1,5 +1,5 @@
 const fs = require('fs').promises;
-const path = require(path);
+const path = require('path');
 
 const pathFile = path.join(__dirname, '../data/veterinary.json');
 
@@ -13,7 +13,7 @@ async function readData() {
 }
 
 async function saveData(data) {
-    fs.writeFile(pathFile, JSON.stringify(data, null, 2))
+   await  fs.writeFile(pathFile, JSON.stringify(data, null, 2))
 }
 
 async function getAllAppointments() {
@@ -23,11 +23,11 @@ async function getAllAppointments() {
 
 async function getAppointmentById(id) {
     const data = await readData();
-    const index = data.appointments.findIndex(a => a.id === parseInt(id))
-    if(index===-1) {
+    const appointment = data.appointments.find(a => a.id === parseInt(id))
+    if(!appointment) {
         return null
     }
-    return data.appointments[index]
+    return appointment
 }
 
 async function createAppointment(cita) {

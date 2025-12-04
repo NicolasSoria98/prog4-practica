@@ -3,7 +3,7 @@ const service = require('../services/ownersService')
 async function getAllOwners(req, res, next) {
     try {
         const owners = await service.getAllOwners()
-        return res.json(owners)
+        return res.status(201).json(owners)
     } catch (error) {
         next(error)
     }

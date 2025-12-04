@@ -25,7 +25,7 @@ async function createOwner(owner) {
     ? Math.max(...data.map(o => o.id)) + 1
     : 1
 
-    return await repository.createOwner(ownerNuvo)
+    return await repository.createOwner(ownerNuevo)
 }
 
 async function getAllOwners() {
@@ -54,7 +54,7 @@ async function updateOwner(id, updates){
     }
     if (updates.phone) {
         const data = await repository.getAllOwners();
-        const phoneTaken = data.some(o=> o.phone === parseInt(updates.phon))
+        const phoneTaken = data.some(o=> o.phone === parseInt(updates.phone))
         if(phoneTaken) {
             throw new Error('telefono ya usado')
         }
@@ -66,6 +66,11 @@ async function deleteOwner(id) {
     const eliminado = await repository.deleteOwner(id)
     if(!eliminado) {
         throw new Error('no encontrado')
+    }
+    const pets = await petRepository.getAllPets()
+    const hasPets = pets.some(p => p.ownerId === parseInt(id))
+    if(hasPets) {
+        throw new Error('No se puede eliminar un dueño con mascotas registradas')
     }
     return eliminado
 }
