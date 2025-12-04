@@ -33,9 +33,23 @@ async function createLoan(loan) {
     return loan;
 }
 
+async function updateLoan(id, updates) {
+    const data = await readData()
+    const index = data.loans.findIndex(l => l.id === parseInt(id))
+    
+    if (index === -1) {
+        return null
+    }
+    
+    data.loans[index] = { ...data.loans[index], ...updates }
+    await saveData(data)
+    return data.loans[index]
+}
+
 
 module.exports = {
     createLoan,
     getAllLoans,
-    getLoanById
+    getLoanById,
+    updateLoan
 }

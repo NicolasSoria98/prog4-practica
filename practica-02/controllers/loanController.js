@@ -1,4 +1,3 @@
-const { create } = require('domain')
 const service = require('../services/loanService')
 
 async function createLoan(req, res, next) {
@@ -27,9 +26,18 @@ async function getLoanById(req, res, next) {
         next(error)
     }
 }
-
+async function returnLoan(req, res, next) {
+    try {
+        const { id } = req.params
+        const loan = await service.returnLoan(id)
+        res.json(loan)
+    } catch (error) {
+        next(error)
+    }
+}
 module.exports = {
     getLoanById,
     getAllLoans,
-    createLoan
+    createLoan,
+    returnLoan
 }

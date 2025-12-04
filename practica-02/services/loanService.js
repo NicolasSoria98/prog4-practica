@@ -35,7 +35,7 @@ async function createLoan(data) {
     await repositoryBooks.updateBook(data.bookId, {
         availableCopies: libro.availableCopies -1
     })
-    await repositoryUsers.updateUser(data.bookId, {
+    await repositoryUsers.updateUser(data.userId, {
         booksCurrentlyBorrowed: user.booksCurrentlyBorrowed +1,
         totalBooksBorrowed: user.totalBooksBorrowed + 1
     })
@@ -52,6 +52,9 @@ async function getAllLoans(filters={}){
         const userId = parseInt(filters.userId)
         loans = loans.filter(l => l.userId === userId)
     }
+    if (filters.status) {
+    loans = loans.filter(l => l.status === filters.status)
+    }
     return loans
 }
 
@@ -63,8 +66,50 @@ async function getLoanById(id) {
     return loan
 }
 
+async function returnLoan(id) {
+    const loan = await repository.getLoanById(id)
+    if (!loan) {
+        throw new Error('Préstamo no encontrado')
+    }
+    
+    if (loan.status === 'returned') {
+        throw new Error('Este préstamo ya fue devuelto')
+    }
+    
+    if (loan.status !== 'active' && loan.status !== 'overdue') {
+        throw new Error('Solo se pueden devolver préstamos activos o vencidos')
+    }
+    
+    const libro = await repositoryBooks.getBookById(loan.bookId)
+    const user = await repositoryUsers.getUserById(loan.userId)
+    
+    if (!libro) {
+        throw new Error('Libro no encontrado')
+    }
+    
+    if (!user) {
+        throw new Error('Usuario no encontrado')
+    }
+
+    const updates = {
+        returnDate: new Date().toISOString(),
+        status: 'returned'
+    }
+    
+    await repositoryBooks.updateBook(loan.bookId, {
+        availableCopies: libro.availableCopies + 1
+    })
+    
+    await repositoryUsers.updateUser(loan.userId, {
+        booksCurrentlyBorrowed: user.booksCurrentlyBorrowed - 1
+    })
+    
+    return await repository.updateLoan(id, updates)
+}
+
 module.exports =  {
     getAllLoans,
     getLoanById,
-    createLoan
+    createLoan,
+    returnLoan
 }
