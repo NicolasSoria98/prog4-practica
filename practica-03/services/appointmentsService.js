@@ -1,7 +1,6 @@
 const repository = require('../repositories/appointmentsRepository')
 const repositoryPets = require('../repositories/petsRepository')
 const repositoryOwner = require('../repositories/ownersRepository');
-const { create } = require('domain');
 
 
 
