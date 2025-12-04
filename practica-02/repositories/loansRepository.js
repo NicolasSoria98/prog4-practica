@@ -5,7 +5,7 @@ const pathFile = path.join(__dirname, '../data/library.json')
 
 async function readData() {
     try {
-        data = await fs.readFile(pathFile, 'utf-8')
+        const data = await fs.readFile(pathFile, 'utf-8')
         return JSON.parse(data)
     } catch (error) {
         return {books: [], users: [], loans: []}
@@ -23,13 +23,13 @@ async function getAllLoans() {
 
 async function getLoanById(id) {
     const data = await readData();
-    return loan = data.loan.find(l => l.id === parseInt(id))
+    return data.loans.find(l => l.id === parseInt(id))
 }
 
 async function createLoan(loan) {
     const data = await readData();
-    data.loan.push(loan)
-    await saveData();
+    data.loans.push(loan)
+    await saveData(data);
     return loan;
 }
 
