@@ -1,0 +1,14 @@
+const express = require('express');
+const router = require(express.Router)
+const controller = require('../controllers/librosController')
+
+router.get('/', controller.getAllBooks)
+router.get('/:id', controller.getBookById)
+
+router.post('/', controller.createBook)
+
+router.patch('/:id', controller.updateBook)
+
+router.delete('/:id', controller.deleteBook)
+
+module.exports = router
