@@ -26,9 +26,17 @@ async function createLoan(data) {
         returnDate: null,
         status: active
     }
+
     const AllLoans = await repository.getAllLoans()
     loan.id = AllLoans.length() > 0
     ? Math.max(... AllLoans.map(l => l.id)) + 1
     : 1
+
+    await repositoryBooks.updateBook(loan.bookId, {
+        availableCopies: bookId.availableCopies -1
+    })
+    await repositoryuser.updateUser(loan.bookId, {
+        booksCurrentlyBorrowed: userId.booksCurrentlyBorrowed +1
+    })
     return await repository.createLoan(loan)
 }
